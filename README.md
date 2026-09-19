@@ -12,7 +12,8 @@ OIO-TIMBER-CD-azure (Git)
 | Path | Purpose |
 |------|---------|
 | `kubernetes/` | OIO app base manifests |
-| `kubernetes/platform-ingress/` | Jenkins + Argo CD Ingress (F5 NGINX / nip.io) |
+| `kubernetes/app-ingress/` | OIO frontend/API/admin Ingress (F5 NGINX / nip.io) |
+| `kubernetes/platform-ingress/` | Jenkins, Argo CD, Grafana, Prometheus Ingress |
 | `environments/azure/` | OIO app ACR image pins |
 | `environments/platform/` | Platform Ingress kustomization entrypoint |
 | `argocd/application.yaml` | Argo Application for OIO app |
@@ -26,10 +27,12 @@ Publish the **contents** of this `CD/` directory as the CD repository root.
 
 ## Exposure
 
-- App / Jenkins / Argo Services stay **ClusterIP**
+- App / Jenkins / Argo / monitoring Services stay **ClusterIP**
 - One Azure LB: NGINX Ingress Service (`20.127.183.78`)
-- Platform UIs: `jenkins.20.127.183.78.nip.io`, `argocd.20.127.183.78.nip.io`
-- OIO routes (`/`, `/api`, `/admin`) are **not** created yet
+- Platform: `jenkins.`, `argocd.`, `grafana.`, `prometheus.` + `20.127.183.78.nip.io`
+- OIO: `app.`, `api.`, `admin.` + `20.127.183.78.nip.io` (host-based; no path rewrite)
+
+Bake frontend/admin with `NEXT_PUBLIC_API_URL=http://api.20.127.183.78.nip.io`.
 
 ## Secrets (out-of-band)
 

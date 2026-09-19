@@ -1,0 +1,24 @@
+# OIO customer frontend — host-based routing via existing F5 NGINX Ingress.
+# Service remains ClusterIP (frontend:3000). No path rewrite required:
+# Next.js owns "/" on this host; API calls go to a separate api.* host
+# via NEXT_PUBLIC_API_URL (see frontend/lib/api.ts: `${API_URL}/api/v1/...`).
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: oio-frontend
+  labels:
+    app.kubernetes.io/part-of: oio-wood-timber
+    app.kubernetes.io/component: ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: app.20.127.183.78.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 3000

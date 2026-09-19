@@ -1,0 +1,25 @@
+# OIO FastAPI backend — host-based routing via existing F5 NGINX Ingress.
+# Service remains ClusterIP (backend:8080). No path rewrite:
+# FastAPI mounts the router at api_v1_prefix=/api/v1 and /health at root.
+# Browser clients call `${NEXT_PUBLIC_API_URL}/api/v1/...` where
+# NEXT_PUBLIC_API_URL must be this origin (no trailing /api).
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: oio-backend
+  labels:
+    app.kubernetes.io/part-of: oio-wood-timber
+    app.kubernetes.io/component: ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: api.20.127.183.78.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 8080

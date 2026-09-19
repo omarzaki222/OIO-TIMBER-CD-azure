@@ -1,0 +1,11 @@
+# OIO application Ingress (frontend / API / admin) for F5 NGINX on AKS.
+# Namespace is set by the parent kubernetes/kustomization.yaml (oio-wood-timber).
+# Do NOT merge into environments/platform (that stays multi-namespace platform UIs).
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - frontend-ingress.yaml
+  - backend-ingress.yaml
+  - admin-ingress.yaml

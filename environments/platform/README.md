@@ -1,11 +1,11 @@
-# Platform environment (Jenkins + Argo CD Ingress only)
+# Platform environment (Jenkins, Argo CD, Grafana, Prometheus Ingress)
 
 Kustomize entrypoint for platform Ingress manifests.
 
 ```text
-kubectl kustomize CD/environments/platform
+kubectl kustomize environments/platform
 ```
 
-Argo CD Application (optional bootstrap): see `CD/argocd/application-platform.yaml`.
+Argo CD Application: see `argocd/application-platform.yaml`.
 
 Not part of `environments/azure` (OIO app).

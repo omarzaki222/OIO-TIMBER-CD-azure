@@ -23,6 +23,7 @@ resources:
   - services/backend.yaml
   - services/frontend.yaml
   - services/admin.yaml
+  - app-ingress
 
 # Secrets (oio-postgres, oio-app-secrets) are created out-of-band — see secrets/README.md
 

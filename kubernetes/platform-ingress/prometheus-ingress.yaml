@@ -1,0 +1,25 @@
+# Prometheus UI — host-based routing via existing F5 NGINX Ingress (one AKS LB).
+# Service remains ClusterIP; do not create a second LoadBalancer.
+#
+# Live fact: monitoring/monitoring-kube-prometheus-prometheus ClusterIP port 9090.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prometheus
+  namespace: monitoring
+  labels:
+    app.kubernetes.io/part-of: oio-timber-azure
+    app.kubernetes.io/component: platform-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: prometheus.20.127.183.78.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: monitoring-kube-prometheus-prometheus
+                port:
+                  number: 9090

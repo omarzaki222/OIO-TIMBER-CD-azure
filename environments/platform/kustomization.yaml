@@ -1,6 +1,5 @@
-# Azure platform Ingress overlay (Jenkins + Argo CD only).
+# Azure platform Ingress overlay (Jenkins, Argo CD, Grafana, Prometheus).
 # Sync this path separately from the OIO app overlay (environments/azure).
-# OIO routes (/ /api /admin) are intentionally NOT included yet.
 
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization

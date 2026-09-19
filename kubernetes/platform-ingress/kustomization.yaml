@@ -9,3 +9,5 @@ kind: Kustomization
 resources:
   - jenkins-ingress.yaml
   - argocd-ingress.yaml
+  - grafana-ingress.yaml
+  - prometheus-ingress.yaml

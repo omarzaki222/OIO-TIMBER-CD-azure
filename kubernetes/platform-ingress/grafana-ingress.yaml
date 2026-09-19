@@ -1,0 +1,29 @@
+# Grafana UI — host-based routing via existing F5 NGINX Ingress (one AKS LB).
+# Service remains ClusterIP; do not create a second LoadBalancer.
+#
+# Live fact: monitoring/monitoring-grafana ClusterIP port 80 → pod 3000.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana
+  namespace: monitoring
+  labels:
+    app.kubernetes.io/part-of: oio-timber-azure
+    app.kubernetes.io/component: platform-ingress
+  annotations:
+    # F5 NGINX Ingress Controller (nginx.org/ingress-controller) — NOT ingress-nginx.
+    # Grafana Live / Explore use WebSockets.
+    nginx.org/websocket-services: "monitoring-grafana"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: grafana.20.127.183.78.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: monitoring-grafana
+                port:
+                  number: 80

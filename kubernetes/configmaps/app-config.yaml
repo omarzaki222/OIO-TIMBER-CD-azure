@@ -1,5 +1,5 @@
 # Non-secret runtime configuration for the OIO backend (Azure lab).
-# After Ingress is configured, replace placeholders with the public origin(s).
+# CORS origins must match the browser origins of the frontend and admin Ingress hosts.
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -10,6 +10,5 @@ data:
   APP_ENV: production
   WEB_CONCURRENCY: "2"
   RUN_SEED: "false"
-  # PLACEHOLDERS — set to the Ingress public URL origin once known, e.g.:
-  # http://<INGRESS_LB_IP>  (frontend) and http://<INGRESS_LB_IP>/admin if needed
-  CORS_ALLOWED_ORIGINS: "http://REPLACE_INGRESS_HOST,http://REPLACE_INGRESS_HOST"
+  # Browser origins for app. + admin. hosts (credentials: include on API calls).
+  CORS_ALLOWED_ORIGINS: "http://app.20.127.183.78.nip.io,http://admin.20.127.183.78.nip.io"

@@ -6,8 +6,7 @@ metadata:
     app: backend
     app.kubernetes.io/component: api
 spec:
-  # ClusterIP only — public entry is the NGINX Ingress LoadBalancer (one LB for the lab).
-  # Application Ingress routes (/ /api /admin) are added in a later step.
+  # ClusterIP only — public entry is api.20.127.183.78.nip.io via app-ingress.
   type: ClusterIP
   selector:
     app: backend

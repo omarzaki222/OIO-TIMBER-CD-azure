@@ -1,4 +1,4 @@
-# Argo CD Application — platform Ingress (Jenkins + Argo CD UIs)
+# Argo CD Application — platform Ingress (Jenkins, Argo CD, Grafana, Prometheus)
 # Separate from oio-wood-timber-azure (app workloads).
 # Apply after reviewing / when ready — not auto-applied by this file alone.
 
@@ -18,7 +18,7 @@ spec:
     path: environments/platform
   destination:
     server: https://kubernetes.default.svc
-    # Ingress objects carry their own namespaces (jenkins, argocd).
+    # Ingress objects carry their own namespaces (jenkins, argocd, monitoring).
     namespace: argocd
   syncPolicy:
     automated:
