@@ -27,8 +27,8 @@ Publish the **contents** of this `CD/` directory as the CD repository root.
 ## Exposure
 
 - App / Jenkins / Argo Services stay **ClusterIP**
-- One Azure LB: NGINX Ingress Service (`20.253.224.52`)
-- Platform UIs: `jenkins.20.253.224.52.nip.io`, `argocd.20.253.224.52.nip.io`
+- One Azure LB: NGINX Ingress Service (`20.127.183.78`)
+- Platform UIs: `jenkins.20.127.183.78.nip.io`, `argocd.20.127.183.78.nip.io`
 - OIO routes (`/`, `/api`, `/admin`) are **not** created yet
 
 ## Secrets (out-of-band)
