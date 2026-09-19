@@ -1,0 +1,11 @@
+# Platform Ingress (Jenkins + Argo CD) for F5 NGINX on AKS.
+# Intentionally does NOT set a global namespace — each Ingress stays in its
+# workload namespace (required for standard Ingress backends).
+# Do NOT merge into environments/azure (that forces namespace: oio-wood-timber).
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - jenkins-ingress.yaml
+  - argocd-ingress.yaml

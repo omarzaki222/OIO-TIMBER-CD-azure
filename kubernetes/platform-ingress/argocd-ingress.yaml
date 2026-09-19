@@ -1,0 +1,33 @@
+# Argo CD UI — host-based routing via existing F5 NGINX Ingress (one AKS LB).
+# Service remains ClusterIP; do not create a second LoadBalancer.
+#
+# Cluster fact: argocd-server ports 80 and 443 both target container 8080.
+# ConfigMap argocd-cmd-params-cm has server.insecure=false → upstream is TLS.
+# Therefore use F5 annotation nginx.org/ssl-services (not nginx.ingress.kubernetes.io/*).
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argocd-server
+  namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: oio-timber-azure
+    app.kubernetes.io/component: platform-ingress
+  annotations:
+    # F5 NGINX Ingress Controller annotations (controller: nginx.org/ingress-controller)
+    nginx.org/ssl-services: "argocd-server"
+    # Argo CD uses a self-signed cert on :8080; do not verify upstream cert in the lab.
+    nginx.org/proxy-ssl-verify: "false"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: argocd.20.253.224.52.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                # Prefer Service port 80 (named http); same endpoints as 443 → targetPort 8080.
+                name: argocd-server
+                port:
+                  number: 80

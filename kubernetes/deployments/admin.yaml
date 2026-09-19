@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin
+  labels:
+    app: admin
+    app.kubernetes.io/component: admin-studio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin
+  template:
+    metadata:
+      labels:
+        app: admin
+        app.kubernetes.io/component: admin-studio
+    spec:
+      # AKS lab: no on-prem ingress-ready selector.
+      nodeSelector:
+        kubernetes.io/os: linux
+      imagePullSecrets:
+        - name: acr-auth
+      containers:
+        - name: admin
+          # Bake public API URL at image build time (CI build-arg).
+          image: oio-admin:dev
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 3000
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 300m
+              memory: 256Mi
+          livenessProbe:
+            httpGet:
+              path: /login
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 20
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /login
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5

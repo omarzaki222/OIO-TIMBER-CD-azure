@@ -1,0 +1,10 @@
+.DS_Store
+*.tfstate
+*.tfstate.*
+.terraform/
+.env
+.env.*
+!.env.example
+secrets.yaml
+**/secrets.yaml
+!**/secrets.example.yaml

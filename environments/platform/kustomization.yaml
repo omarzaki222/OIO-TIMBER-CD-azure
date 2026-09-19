@@ -1,0 +1,9 @@
+# Azure platform Ingress overlay (Jenkins + Argo CD only).
+# Sync this path separately from the OIO app overlay (environments/azure).
+# OIO routes (/ /api /admin) are intentionally NOT included yet.
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../kubernetes/platform-ingress

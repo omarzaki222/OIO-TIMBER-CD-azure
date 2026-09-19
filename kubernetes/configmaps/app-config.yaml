@@ -1,0 +1,15 @@
+# Non-secret runtime configuration for the OIO backend (Azure lab).
+# After Ingress is configured, replace placeholders with the public origin(s).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: oio-app-config
+  labels:
+    app.kubernetes.io/component: backend
+data:
+  APP_ENV: production
+  WEB_CONCURRENCY: "2"
+  RUN_SEED: "false"
+  # PLACEHOLDERS — set to the Ingress public URL origin once known, e.g.:
+  # http://<INGRESS_LB_IP>  (frontend) and http://<INGRESS_LB_IP>/admin if needed
+  CORS_ALLOWED_ORIGINS: "http://REPLACE_INGRESS_HOST,http://REPLACE_INGRESS_HOST"

@@ -1,0 +1,21 @@
+# Azure AKS environment overlay
+#
+# Images: oioazureregistry.azurecr.io/oio/{backend,frontend,admin}:<tag>
+# CI updates newTag values and pushes this overlay to OIO-TIMBER-CD-azure.
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../kubernetes
+
+images:
+  - name: oio-backend
+    newName: oioazureregistry.azurecr.io/oio/backend
+    newTag: "latest"
+  - name: oio-frontend
+    newName: oioazureregistry.azurecr.io/oio/frontend
+    newTag: "latest"
+  - name: oio-admin
+    newName: oioazureregistry.azurecr.io/oio/admin
+    newTag: "latest"

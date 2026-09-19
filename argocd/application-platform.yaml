@@ -1,0 +1,35 @@
+# Argo CD Application — platform Ingress (Jenkins + Argo CD UIs)
+# Separate from oio-wood-timber-azure (app workloads).
+# Apply after reviewing / when ready — not auto-applied by this file alone.
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: oio-platform-ingress
+  namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: oio-timber-azure
+    app.kubernetes.io/component: platform-ingress
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/omarzaki222/OIO-TIMBER-CD-azure.git
+    targetRevision: main
+    path: environments/platform
+  destination:
+    server: https://kubernetes.default.svc
+    # Ingress objects carry their own namespaces (jenkins, argocd).
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=false
+      - ServerSideApply=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m

@@ -1,0 +1,64 @@
+# Argo CD Application — Azure OIO Timber
+# Apply AFTER Argo CD Helm release is installed (Terraform helm_release.argocd).
+# Repo: Azure CD only — do not point at on-prem OIO-TIMBER-CD.
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: oio-wood-timber-azure
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    app.kubernetes.io/part-of: oio-wood-timber
+    app.kubernetes.io/environment: azure
+spec:
+  project: default
+  source:
+    # When this Application lives in the CD Git repo at repo root layout:
+    #   kubernetes/  environments/  argocd/
+    # path is environments/azure.
+    # If publishing from the monorepo without flattening, use: CD/environments/azure
+    repoURL: https://github.com/omarzaki222/OIO-TIMBER-CD-azure.git
+    targetRevision: main
+    path: environments/azure
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: oio-wood-timber
+  ignoreDifferences:
+    - group: apps
+      kind: StatefulSet
+      name: postgres
+      jsonPointers:
+        - /spec/template/metadata/annotations
+        - /spec/revisionHistoryLimit
+        - /spec/persistentVolumeClaimRetentionPolicy
+        - /spec/podManagementPolicy
+        - /spec/updateStrategy
+        - /spec/template/spec/dnsPolicy
+        - /spec/template/spec/restartPolicy
+        - /spec/template/spec/schedulerName
+        - /spec/template/spec/securityContext
+        - /spec/template/spec/terminationGracePeriodSeconds
+        - /spec/template/spec/containers/0/imagePullPolicy
+        - /spec/template/spec/containers/0/terminationMessagePath
+        - /spec/template/spec/containers/0/terminationMessagePolicy
+        - /spec/template/spec/containers/0/ports/0/protocol
+        - /spec/template/spec/containers/0/livenessProbe/failureThreshold
+        - /spec/template/spec/containers/0/livenessProbe/successThreshold
+        - /spec/template/spec/containers/0/readinessProbe/failureThreshold
+        - /spec/template/spec/containers/0/readinessProbe/successThreshold
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+      - RespectIgnoreDifferences=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m

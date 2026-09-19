@@ -1,0 +1,39 @@
+# OIO WOOD & TIMBER — Azure CD Kustomize base
+# No Tailscale Ingress, Funnel, HPA, or NetworkPolicies.
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: oio-wood-timber
+
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: oio-wood-timber
+      app.kubernetes.io/managed-by: kustomize
+    includeSelectors: false
+
+resources:
+  - namespace/namespace.yaml
+  - configmaps/app-config.yaml
+  - deployments/postgres.yaml
+  - deployments/backend.yaml
+  - deployments/frontend.yaml
+  - deployments/admin.yaml
+  - services/postgres.yaml
+  - services/backend.yaml
+  - services/frontend.yaml
+  - services/admin.yaml
+
+# Secrets (oio-postgres, oio-app-secrets) are created out-of-band — see secrets/README.md
+
+# Base image names; ACR remapping is in environments/azure/
+images:
+  - name: oio-backend
+    newName: oio-backend
+    newTag: dev
+  - name: oio-frontend
+    newName: oio-frontend
+    newTag: dev
+  - name: oio-admin
+    newName: oio-admin
+    newTag: dev

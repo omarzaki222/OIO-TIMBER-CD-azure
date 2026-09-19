@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: oio-wood-timber
+  labels:
+    app.kubernetes.io/part-of: oio-wood-timber
+    app.kubernetes.io/name: oio-wood-timber
+    # Azure lab: no on-prem ingress-nginx webhook bypass label.

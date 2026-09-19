@@ -1,0 +1,27 @@
+# Jenkins UI — host-based routing via existing F5 NGINX Ingress (one AKS LB).
+# Service remains ClusterIP; do not create a second LoadBalancer.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jenkins
+  namespace: jenkins
+  labels:
+    app.kubernetes.io/part-of: oio-timber-azure
+    app.kubernetes.io/component: platform-ingress
+  annotations:
+    # F5 NGINX Ingress Controller (nginx.org/ingress-controller) — NOT ingress-nginx.
+    # Jenkins serves plain HTTP; enable WebSocket for Blue Ocean / agent features.
+    nginx.org/websocket-services: "jenkins"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: jenkins.20.253.224.52.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: jenkins
+                port:
+                  number: 8080

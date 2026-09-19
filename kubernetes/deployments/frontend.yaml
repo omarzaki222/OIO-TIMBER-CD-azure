@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+    app.kubernetes.io/component: customer-site
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+        app.kubernetes.io/component: customer-site
+    spec:
+      # AKS lab: no on-prem ingress-ready selector.
+      nodeSelector:
+        kubernetes.io/os: linux
+      imagePullSecrets:
+        - name: acr-auth
+      containers:
+        - name: frontend
+          # Bake public API URL at image build time (CI build-arg).
+          # After Ingress: http://<INGRESS_LB_IP>/api  (or full origin used by the app).
+          image: oio-frontend:dev
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 3000
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 300m
+              memory: 256Mi
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 20
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
