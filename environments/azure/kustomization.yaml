@@ -12,10 +12,10 @@ resources:
 images:
   - name: oio-backend
     newName: oioazureregistry.azurecr.io/oio/backend
-    newTag: "latest"
+    newTag: "3-74b8d88"
   - name: oio-frontend
     newName: oioazureregistry.azurecr.io/oio/frontend
-    newTag: "latest"
+    newTag: "3-74b8d88"
   - name: oio-admin
     newName: oioazureregistry.azurecr.io/oio/admin
-    newTag: "latest"
+    newTag: "3-74b8d88"
